@@ -6,11 +6,16 @@
 //  Copyright (c) 2014 M. All rights reserved.
 //
 
+// Домашнее задание
+// 1. Сделать слайд шоу по нескольким картинкам, с кнопками вперед и назад
+
 import UIKit
 
 class ViewController: UIViewController {
     
     var scrollView:UIScrollView?
+    var numberPageImage:UIImageView?
+    
     var timer:NSTimer? = nil
     
     let frameOffsets:[Int] = [45, 110, 130, 110, 95, 100, 100, 85, 90, 95, 105, 105, 100]
@@ -28,15 +33,20 @@ class ViewController: UIViewController {
         
         // scrollView
         
-        let image:UIImage? = UIImage(named: "strip")
+        let imageStrip:UIImage? = UIImage(named: "strip")
     
-        let startYPos = CGFloat((self.view.bounds.size.height - image!.size.height) / 2.0)
+        let startYPos = CGFloat((self.view.bounds.size.height - imageStrip!.size.height) / 2.0)
         
         scrollView = UIScrollView(frame: CGRectMake(160, startYPos, CGFloat(frameWidth), CGFloat(frameHeight)))
         self.view.addSubview(scrollView!)
         
-        let imageView = UIImageView(image: image)
-        scrollView!.addSubview(imageView)
+        let imageViewStrip = UIImageView(image: imageStrip)
+        scrollView!.addSubview(imageViewStrip)
+        
+        // Image with "Digit"
+        
+        numberPageImage = UIImageView(frame: CGRect(x: 200, y: startYPos + CGFloat(frameHeight) + 20, width: 20, height: 20))
+        self.view.addSubview(numberPageImage!)
         
         // button Start
         
@@ -87,12 +97,17 @@ class ViewController: UIViewController {
 
     // MARK: Slider Controls
     
+    func showPageNumber() {
+        numberPageImage?.image = UIImage(named: "digit-\(currentSlide + 1)")
+    }
+    
     func showCurrentSlide() {
         var offset = 0
         for i in 0...currentSlide {
             offset += frameOffsets[i]
         }
         scrollView!.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+        showPageNumber()
     }
     
     func prevSlide() {
